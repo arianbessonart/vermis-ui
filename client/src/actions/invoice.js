@@ -1,14 +1,14 @@
 import * as actionType from './types'
 import axios from 'axios'
 
-export function fetchClientsAction() {
+export function fetchInvoicesAction() {
   return function (dispatch) {
     axios({
       method: "get",
-      url: "http://demo5871819.mockable.io/clients"
+      url: "http://localhost:8081/api/invoices"
     }).then((response) => {
       dispatch({
-        type: actionType.FETCH_CLIENTS_SUCCESS,
+        type: actionType.FETCH_INVOICES_SUCCESS,
         payload: response.data
       });
     });
