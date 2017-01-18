@@ -2,15 +2,6 @@ import React from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 
-const style = {
-  marginRight: 20,
-  top: 'auto',
-  right: 20,
-  bottom: 20,
-  left: 'auto',
-  position: 'fixed'
-};
-
 let InvoiceList = ({invoices}) => {
   let invoiceList = invoices.map((val, index) => {
     let statusIcon;

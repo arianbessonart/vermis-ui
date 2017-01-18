@@ -5,25 +5,23 @@ import MenuItem from 'material-ui/MenuItem'
 
 class ClientSelector extends React.Component {
 
+  state = { itemSelected: null};
+
   constructor() {
     super();
-    this.state = { itemSelected: null};
   }
 
-  onSelectedItem = (event, value) => {
-    let client = this.props.clients[value];
-    this.setState({itemSelected: client.id})
+  onSelectedItem = (event, index) => {
+    let client = this.props.clients[index];
+    this.setState({itemSelected: client._id});
     this.props.onSelect(client);
   };
 
   render() {
-    let clientsOption = this.props.clients.map((val, index) => { return (<MenuItem key={index} value={val.id} primaryText={val.name}/>)});
-    let { itemSelected } = this.state;
-
-
+    let clientsOption = this.props.clients.map((val, index) => { return (<MenuItem key={index} value={val._id} primaryText={val.name}/>)});
 
     return (
-      <SelectField floatingLabelText="Select a Client" value={itemSelected} onChange={this.onSelectedItem}>
+      <SelectField floatingLabelText="Select a Client" value={this.state.itemSelected} onChange={this.onSelectedItem}>
         {clientsOption}
       </SelectField>
     );
