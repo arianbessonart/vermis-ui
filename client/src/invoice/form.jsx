@@ -5,14 +5,11 @@ import DatePicker from 'material-ui/DatePicker'
 import TextField from 'material-ui/TextField'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Checkbox from 'material-ui/Checkbox';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import RaisedButton from 'material-ui/RaisedButton';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import { Flex, Box } from 'reflexbox'
 
 import ClientSelector  from '../shared/components/ClientSelector'
+import InvoiceDetailTable from './components/InvoiceDetailTable'
 
 import { fetchClientsAction } from '../actions/client'
 import { getAllClients } from '../selectors/client'
@@ -24,15 +21,6 @@ const styles = {
   checkbox: {
     marginBottom: 16,
   },
-};
-
-const styleAddRow = {
-  marginRight: 20,
-  top: 'auto',
-  right: 20,
-  bottom: 20,
-  left: 'auto',
-  position: 'static'
 };
 
 class InvoiceForm extends React.Component {
@@ -75,9 +63,29 @@ class InvoiceForm extends React.Component {
     this.setState({clientAddress: client.address});
   };
 
+  handleProductTable(evt) {
+    console.log(evt);
+    // var item = {
+    //   detail: evt.target.detail,
+    //   amount: evt.target.amount
+    // };
+    // var products = this.state.products.slice();
+    // var newProducts = products.map(function(product) {
+    //
+    //   for (var key in product) {
+    //     if (key == item.name && product.id == item.id) {
+    //       product[key] = item.value;
+    //
+    //     }
+    //   }
+    //   return product;
+    // });
+    // this.setState({details:newProducts});
+    //  console.log(this.state.products);
+  };
+
   render() {
     let {clients} = this.props;
-    let detailsRows = this.state.details.map((val, index) => {return (<TableRow key={index}><TableRowColumn>{val.detail}</TableRowColumn><TableRowColumn>{val.amount}</TableRowColumn></TableRow>)});
     return (
       <div>
         <Flex column>
@@ -157,20 +165,7 @@ class InvoiceForm extends React.Component {
             </Flex>
           </Box>
           <Box>
-            <FloatingActionButton mini={true} style={styleAddRow}>
-              <ContentAdd />
-            </FloatingActionButton>
-            <Table>
-              <TableHeader displaySelectAll={false}>
-                <TableRow>
-                  <TableHeaderColumn>Detail</TableHeaderColumn>
-                  <TableHeaderColumn>Amount</TableHeaderColumn>
-                </TableRow>
-              </TableHeader>
-              <TableBody displayRowCheckbox={false}>
-                {detailsRows}
-              </TableBody>
-            </Table>
+            <InvoiceDetailTable />
           </Box>
         </Flex>
       </div>
