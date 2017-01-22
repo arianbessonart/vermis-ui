@@ -10,7 +10,8 @@ const styleAddRow = {
   right: 20,
   bottom: 20,
   left: 'auto',
-  position: 'static'
+  position: 'static',
+  float: 'right'
 };
 
 class DetailTable extends React.Component {
@@ -27,9 +28,9 @@ class DetailTable extends React.Component {
     });
     return (
       <div>
-        <FloatingActionButton mini={true} style={styleAddRow} onClick={this.props.onRowAdd}>
-          <ContentAdd />
-        </FloatingActionButton>
+          <FloatingActionButton mini={true} style={styleAddRow} onClick={this.props.onRowAdd}>
+            <ContentAdd />
+          </FloatingActionButton>
         <Table>
           <TableHeader>
             <TableRow>
