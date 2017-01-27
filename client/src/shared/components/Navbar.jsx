@@ -13,6 +13,9 @@ let Navbar = () => {
         <FlatButton
           containerElement={<Link to="/clients" />}
           label="Clients"/>
+        <FlatButton
+          containerElement={<Link to="/invoices/new" />}
+          label="Create Invoice"/>
       </ToolbarGroup>
     </Toolbar>
   );

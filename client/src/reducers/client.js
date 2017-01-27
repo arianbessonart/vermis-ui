@@ -12,10 +12,11 @@ const clientReducer = (state = {
         list: action.payload
       };
     case actionType.SELECT_CLIENT:
+      console.log(action);
       return {
         ...state,
-        selected: state.list.filter(e => {
-          return e.id === action.payload
+        selected: state.list.filter(c => {
+          return c._id === action.payload
         })[0]
       };
     default:

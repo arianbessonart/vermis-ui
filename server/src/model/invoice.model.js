@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var InvoiceItemSchema = new Schema({
-  name: { type: String, required: true },
+  detail: { type: String, required: true },
   quantity: {type: Number, default: 1},
   amount: Number
 });
@@ -16,8 +16,10 @@ var invoiceSchema = new Schema({
   total: Number,
   status: { type: String, enum: ['pending', 'charged', 'canceled']},
   dateBilled: Date,
-  created_at: Date,
-  updated_at: Date
+  createdAt: Date,
+  createdBy: String,
+  updatedAt: Date,
+  updatedBy: String
 });
 
 invoiceSchema.pre('save', function(next) {

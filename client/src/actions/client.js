@@ -14,3 +14,11 @@ export function fetchClientsAction() {
     });
   }
 }
+
+export function selectClientAction(id) {
+  return {
+    type: actionType.SELECT_CLIENT,
+    payload: id
+  }
+}
+
