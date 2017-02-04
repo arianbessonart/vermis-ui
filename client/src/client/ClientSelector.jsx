@@ -15,6 +15,9 @@ class ClientSelector extends React.Component {
   onSelectedItem = (event, index) => {
     let client = this.props.clients[index];
     this.props.selectClient(client._id);
+    if (this.props.onSelected) {
+      this.props.onSelected(client._id);
+    }
   };
 
   render() {

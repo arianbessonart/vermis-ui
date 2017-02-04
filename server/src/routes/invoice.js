@@ -23,17 +23,21 @@ function findById(req, res, next) {
 }
 
 function create(req, res, next) {
-  if (!req.body.name || !req.body.number || !req.body.date || !req.body.items.length > 0) {
+  if (!req.body.name || !req.body.number || !req.body.date) {
     res.status(403).end();
   }
   var invoice = new Invoice(req.body);
   invoice.save(function (err, saved) {
-    if (err) {
+    console.log(err);
+    if (!err) {
+      res.status(200).send({invoice: saved});
+    } else {
       res.status(500).send(err);
     }
-    res.status(200).send({invoice: saved});
   });
 }
+
+
 
 function printPdf(req, res, next) {
   if (!req.params.id) {

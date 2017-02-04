@@ -2,8 +2,10 @@ import React from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 
-let InvoiceList = ({invoices}) => {
+let InvoiceList = ({invoices, onSelected}) => {
+
   let invoiceList = invoices.map((val, index) => {
+
     let statusIcon;
     if (val.status === "pending") {
       statusIcon = <i className="material-icons">schedule</i>
@@ -13,7 +15,7 @@ let InvoiceList = ({invoices}) => {
       statusIcon = <i className="material-icons">cancel</i>
     }
     let chargeInvoice = val.status === "pending" ? <RaisedButton label="Charge" primary={true}/> : <RaisedButton label={val.status} disabled={true} primary={true}/>
-    return (<TableRow key={index} id={val.id}>
+    return (<TableRow key={index} id={val._id}>
         <TableRowColumn>{val.client.name}</TableRowColumn>
         <TableRowColumn>{val.name}</TableRowColumn>
         <TableRowColumn>{val.number}</TableRowColumn>
@@ -26,7 +28,10 @@ let InvoiceList = ({invoices}) => {
   });
   return (
     <div>
-      <Table>
+      <Table onRowSelection={(index) => {
+        var invoice = invoices[index[0]];
+        onSelected(invoice._id);
+      }}>
         <TableHeader displaySelectAll={false}>
           <TableRow>
             <TableHeaderColumn>Client</TableHeaderColumn>

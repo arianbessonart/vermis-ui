@@ -13,8 +13,11 @@ var invoiceSchema = new Schema({
   client: { type: Schema.Types.ObjectId, ref: 'Client' },
   date: { type: Date, required: true },
   items: [InvoiceItemSchema],
+  iva: Number,
+  subTotal: Number,
   total: Number,
-  status: { type: String, enum: ['pending', 'charged', 'canceled']},
+  status: { type: String, enum: ['pending', 'charged', 'canceled'], default: 'pending'},
+  retention: { type: Boolean, default: false},
   dateBilled: Date,
   createdAt: Date,
   createdBy: String,
@@ -25,10 +28,10 @@ var invoiceSchema = new Schema({
 invoiceSchema.pre('save', function(next) {
   var currentDate = new Date();
 
-  this.updated_at = currentDate;
+  this.updatedAt = currentDate;
 
-  if (!this.created_at) {
-    this.created_at = currentDate;
+  if (!this.createdAt) {
+    this.createdAt = currentDate;
   }
   next();
 });

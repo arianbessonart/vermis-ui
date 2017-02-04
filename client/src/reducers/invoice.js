@@ -4,7 +4,7 @@ import * as actionType from '../actions/types'
 const invoiceReducer = (state = {
   list: [],
   selected: {},
-  newInvoice: {client: null, date: null, items: [], total: 0, subTotal: 0, iva: 0}
+  newInvoice: {date: null, items: [], total: 0, subTotal: 0, iva: 0, name: "", number: "", retention: false}
 }, action) => {
   switch (action.type) {
     case actionType.FETCH_INVOICES_SUCCESS:
@@ -36,13 +36,12 @@ const invoiceReducer = (state = {
       var newItems = [...state.newInvoice.items.slice(0, index),
                       item,
                       ...state.newInvoice.items.slice(index+1)];
-      var subTotal = sumInvoiceItems(newItems);
       return {
         ...state,
         newInvoice: {
           ...state.newInvoice,
           items: newItems,
-          total: subTotal
+          ...sumInvoiceItems(newItems)
         }
       };
     case actionType.CHANGE_ITEM_DETAIL:
@@ -63,13 +62,44 @@ const invoiceReducer = (state = {
     case actionType.DELETE_ITEM:
       var index = action.payload.index;
       var newItems = [...state.newInvoice.items.slice(0, index), ...state.newInvoice.items.slice(index+1)];
-      console.log(newItems);
       return {
         ...state,
         newInvoice: {
           ...state.newInvoice,
           items: newItems,
-          total: sumInvoiceItems(newItems)
+          ...sumInvoiceItems(newItems)
+        }
+      };
+    case actionType.CHANGE_INVOICE_NAME:
+      return {
+        ...state,
+        newInvoice: {
+          ...state.newInvoice,
+          name: action.payload.val
+        }
+      };
+    case actionType.CHANGE_INVOICE_NUMBER:
+      return {
+        ...state,
+        newInvoice: {
+          ...state.newInvoice,
+          number: action.payload.val
+        }
+      };
+    case actionType.CHANGE_INVOICE_DATE:
+      return {
+        ...state,
+        newInvoice: {
+          ...state.newInvoice,
+          date: action.payload.val
+        }
+      };
+    case actionType.SAVE_INVOICE:
+      return {
+        ...state,
+        newInvoice: {
+          ...state.newInvoice,
+          number: action.payload.val
         }
       };
     default:
@@ -86,13 +116,24 @@ function sumInvoiceItems(items) {
     subTotal = items.map((i) => i.amount)
       .reduce((a, b) => {
         if (b !== "" && !isNaN(b)) {
-          return parseFloat(a) + parseFloat(b);
+          return Number(a) + Number(b);
         } else {
-          return parseFloat(a);
+          return Number(a);
         }
       }, 0);
   }
-  return subTotal;
+  subTotal = Number(subTotal);
+  var iva = subTotal * 0.22;
+  var total = subTotal + iva;
+  total = Number(total).format(2);
+  subTotal = Number(subTotal).format(2);
+  iva = Number(iva).format(2);
+  return {subTotal, iva, total};
 }
+
+Number.prototype.format = function(n, x) {
+  var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+  return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+};
 
 export default invoiceReducer;

@@ -1,5 +1,6 @@
 import * as actionType from './types'
 import axios from 'axios'
+import {browserHistory} from 'react-router';
 
 export function fetchInvoicesAction() {
   return function (dispatch) {
@@ -54,5 +55,44 @@ export function deleteItemInvoiceAction(index) {
   return {
     type: actionType.DELETE_ITEM,
     payload: {index}
+  }
+}
+
+export function changeNameInvoiceAction(val) {
+  return {
+    type: actionType.CHANGE_INVOICE_NAME,
+    payload: {val}
+  }
+}
+
+export function changeNumberInvoiceAction(val) {
+  return {
+    type: actionType.CHANGE_INVOICE_NUMBER,
+    payload: {val}
+  }
+}
+
+export function changeDateInvoiceAction (val) {
+  return {
+    type: actionType.CHANGE_INVOICE_DATE,
+    payload: {val}
+  }
+}
+
+
+export function createInvoiceAction(invoice, client) {
+  invoice.client = client._id;
+  return function (dispatch) {
+    axios({
+      method: "post",
+      url: "http://localhost:8081/api/invoices/",
+      data: invoice
+    }).then((response) => {
+      browserHistory.push('/invoices');
+      dispatch({
+        type: actionType.CREATE_INVOICE_SUCCESS,
+        payload: response.data
+      });
+    });
   }
 }

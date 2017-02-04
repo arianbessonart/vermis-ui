@@ -6,7 +6,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import IconButton from 'material-ui/IconButton';
 
 import {getNewInvoice} from '../../selectors/invoice'
-import {addItemInvoiceAction, changeAmountItemInvoiceAction, changeDetailItemInvoiceAction, deleteItemInvoiceAction} from '../../actions/invoice'
+import {changeAmountItemInvoiceAction, changeDetailItemInvoiceAction, deleteItemInvoiceAction} from '../../actions/invoice'
 
 class InvoiceItemTable extends React.Component {
 
@@ -15,15 +15,14 @@ class InvoiceItemTable extends React.Component {
 
   render() {
     let { invoice, addItem, changeProductAmount, changeItemDetail, deleteItem} = this.props;
-    console.log(invoice.items);
     let items = invoice.items.map((val, index) => {
       return (
         <TableRow key={index}>
           <TableRowColumn style={{width: "70%"}}>
-            <TextField fullWidth={true} label={val.detail} id={String(index)} key={index} onChange={ (e, val) => changeItemDetail(index, val)} />
+            <TextField fullWidth={true} value={val.detail} id={String(index)} key={index} onChange={ (e, val) => changeItemDetail(index, val)} />
           </TableRowColumn>
           <TableRowColumn style={{width: "20%"}}>
-            <TextField fullWidth={true} label={val.amount} id={String(index)} key={index} onChange={ (e, val) => changeProductAmount(index, val)} />
+            <TextField fullWidth={true} value={val.amount} id={String(index)} key={index} onChange={ (e, val) => changeProductAmount(index, val)} />
           </TableRowColumn>
           <TableRowColumn style={{width: "10%"}}>
             <IconButton iconClassName="material-icons" onClick={() => deleteItem(index)}>delete</IconButton>
@@ -44,8 +43,6 @@ class InvoiceItemTable extends React.Component {
             {items}
           </TableBody>
         </Table>
-        <FlatButton label="Add product" onClick={addItem} />
-
       </div>
     );
   }
@@ -53,9 +50,6 @@ class InvoiceItemTable extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addItem: () => {
-      dispatch(addItemInvoiceAction({detail: "", amount: 0}));
-    },
     changeProductAmount: (index, val) => {
       dispatch(changeAmountItemInvoiceAction(index, val));
     },

@@ -1,5 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import {browserHistory} from 'react-router'
+import {DatePicker} from 'material-ui';
 
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
@@ -30,7 +32,9 @@ class InvoiceHome extends React.Component {
     let {invoices} = this.props;
     return (
       <div>
-        <InvoiceList invoices={invoices} />
+        <InvoiceList invoices={invoices} onSelected={(invoiceId) => {
+          browserHistory.push('/invoices/'+invoiceId)
+        }} />
         <Link to={`/invoices/new`}>
           <FloatingActionButton style={style}>
             <ContentAdd />

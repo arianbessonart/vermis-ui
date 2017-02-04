@@ -11,11 +11,11 @@ import NotFoundPage from './shared/components/NotFoundPage'
 
 const routes = (
   <Route path='/' component={App}>
-    {/*<Route path='invoices' component={InvoiceHome} />*/}
+    <Route path='invoices' component={InvoiceHome} />
     <Route path='invoices/new' component={InvoiceCreate} />
     <Route path='clients' component={InvoiceCreate} />
     <Route path='invoices/edit/:invoiceId' component={InvoiceEdit} />
-    {/*<Route path='invoices/:invoiceId' component={InvoiceView} />*/}
+    <Route path='invoices/:invoiceId' component={InvoiceView} />
     {/*<Route path='*' component={NotFoundPage} />*/}
   </Route>
 );
