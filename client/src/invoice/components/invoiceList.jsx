@@ -5,8 +5,11 @@ import {Link} from 'react-router'
 
 let InvoiceList = ({invoices, onCharge}) => {
 
-  let invoiceList = invoices.map((val, index) => {
+  const calculateRetention = (total) => {
+    return Number(total - (total * 0.07)).format(2);
+  };
 
+  let invoiceList = invoices.map((val, index) => {
     let statusIcon;
     if (val.status === "pending") {
       statusIcon = <i className="material-icons">schedule</i>
@@ -18,9 +21,10 @@ let InvoiceList = ({invoices, onCharge}) => {
     let chargeInvoice = val.status === "pending" ? <RaisedButton label="Charge" primary={true} onClick={ () => onCharge(val._id)}></RaisedButton>: <RaisedButton label={val.status} disabled={true} primary={true}/>
     return (<TableRow key={index} id={val._id}>
         <TableRowColumn>{val.client.name}</TableRowColumn>
-        <TableRowColumn><Link to={"/invoices/"+ val._id}>{val.name}</Link></TableRowColumn>
+        <TableRowColumn><Link to={"/invoices/edit/"+ val._id}>{val.name}</Link></TableRowColumn>
         <TableRowColumn>{val.number}</TableRowColumn>
         <TableRowColumn>${val.total}</TableRowColumn>
+        <TableRowColumn>${ val.retention ? calculateRetention(val.total) : val.total }</TableRowColumn>
         <TableRowColumn>{val.date}</TableRowColumn>
         <TableRowColumn>{statusIcon}</TableRowColumn>
         <TableRowColumn>{chargeInvoice}</TableRowColumn>
@@ -36,6 +40,7 @@ let InvoiceList = ({invoices, onCharge}) => {
             <TableHeaderColumn>Name</TableHeaderColumn>
             <TableHeaderColumn>Invoice N⁰</TableHeaderColumn>
             <TableHeaderColumn>Total</TableHeaderColumn>
+            <TableHeaderColumn>Total - Retention</TableHeaderColumn>
             <TableHeaderColumn>Date</TableHeaderColumn>
             <TableHeaderColumn>Status</TableHeaderColumn>
             <TableHeaderColumn>Billing</TableHeaderColumn>

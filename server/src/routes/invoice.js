@@ -19,7 +19,13 @@ function find(req, res, next) {
 }
 
 function findById(req, res, next) {
-  res.status(200).send("{}");
+  Invoice.findById(req.params.id, function (err, invoice) {
+    if (!err) {
+      res.status(200).send(invoice);
+    } else {
+      res.status(500).send(err);
+    }
+  });
 }
 
 function create(req, res, next) {
@@ -55,6 +61,20 @@ function changeStatus(req, res, next) {
   });
 }
 
+function update(req, res, next) {
+  Invoice.findById(req.params.id, function (err, invoice) {
+    if (!err) {
+      invoice.update(req.body, function (err, saved) {
+        if (!err) {
+          res.status(200).send({invoice: saved});
+        }
+      });
+    } else {
+      res.status(500).send(err);
+    }
+  });
+}
+
 function printPdf(req, res, next) {
   if (!req.params.id) {
     res.status(403).end();
@@ -80,5 +100,6 @@ router.get('/:id/print', printPdf);
 router.get('/:id', findById);
 router.post('/', create);
 router.put('/:id/status/:status', changeStatus);
+router.put('/:id', update);
 
 module.exports = router;

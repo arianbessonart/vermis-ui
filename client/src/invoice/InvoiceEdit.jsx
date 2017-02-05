@@ -10,14 +10,13 @@ class InvoiceCreate extends React.Component {
 
 
   componentDidMount() {
-    this.props.fetchInvoice(this.props.params.id);
+    this.props.fetchInvoice(this.props.params.invoiceId);
   }
 
   render() {
-    let {invoice} = this.props;
     return (
       <div>
-        <InvoiceForm invoice={invoice} isEditing={true} />
+        <InvoiceForm isEditing={true} />
       </div>
     );
   }
@@ -25,16 +24,14 @@ class InvoiceCreate extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchInvoice: () => {
-      dispatch(fetchInvoiceAction())
+    fetchInvoice: (id) => {
+      dispatch(fetchInvoiceAction(id))
     }
   }
 };
 
-// Using selector
 const mapStateToProps = (state) => {
   return {
-    invoice: getSelected(state),
   }
 };
 

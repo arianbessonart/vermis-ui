@@ -13,9 +13,10 @@ import ClientSelector from '../client/ClientSelector'
 import InvoiceItemTable from './components/InvoiceItemTable'
 
 import {getAllClients, getSelectedClient} from '../selectors/client'
-import {getNewInvoice} from '../selectors/invoice'
-import {fetchClientsAction} from '../actions/client'
-import {addItemInvoiceAction, changeNameInvoiceAction, changeNumberInvoiceAction, createInvoiceAction, changeDateInvoiceAction} from '../actions/invoice'
+import {getSelected} from '../selectors/invoice'
+import {fetchClientsAction, selectClientAction} from '../actions/client'
+import {addItemInvoiceAction, changeNameInvoiceAction, changeNumberInvoiceAction,
+  createInvoiceAction, changeDateInvoiceAction, updateInvoiceAction, changeRetentionInvoiceAction} from '../actions/invoice'
 
 const style = {
   float: "right"
@@ -25,11 +26,10 @@ const style = {
 class InvoiceForm extends React.Component {
 
   componentDidMount() {
-    this.props.fetchClients();
   }
 
   render() {
-    let {clients, invoice, clientSelected, addItem, handleName, handleNumber, handleDate, save} = this.props;
+    let {isEditing, clients, invoice, clientSelected, addItem, handleName, handleNumber, handleDate, save, handleRetention} = this.props;
     return (
       <div>
         <Grid style={{margin: "10px"}}>
@@ -75,6 +75,9 @@ class InvoiceForm extends React.Component {
                   <DatePicker hintText="Date" mode="landscape" value={invoice.date} onChange={(e, val) => handleDate(val)}/>
                   <Toggle
                     label="Retention"
+                    toggled={invoice.retention}
+                    labelPosition="right"
+                    onToggle={handleRetention}
                   />
                 </CardText>
               </Card>
@@ -110,7 +113,7 @@ class InvoiceForm extends React.Component {
               <FloatingActionButton onClick={addItem}>
                 <ContentAdd />
               </FloatingActionButton>
-              <FloatingActionButton style={style} onClick={() => save(invoice, clientSelected)}>
+              <FloatingActionButton style={style} onClick={() => save(isEditing, invoice, clientSelected)}>
                 <ContentSave />
               </FloatingActionButton>
             </div>
@@ -127,8 +130,12 @@ const mapDispatchToProps = (dispatch) => {
     addItem: () => {
       dispatch(addItemInvoiceAction({detail: "", amount: 0}));
     },
-    save: (invoice, client) => {
-      dispatch(createInvoiceAction(invoice, client));
+    save: (isEditing, invoice, client) => {
+      if (isEditing) {
+        dispatch(updateInvoiceAction(invoice, client));
+      } else {
+        dispatch(createInvoiceAction(invoice, client));
+      }
     },
     fetchClients: () => {
       dispatch(fetchClientsAction())
@@ -142,6 +149,12 @@ const mapDispatchToProps = (dispatch) => {
     handleDate: (val) => {
       dispatch(changeDateInvoiceAction(val))
     },
+    selectClient: (id) => {
+      dispatch(selectClientAction(id))
+    },
+    handleRetention: () => {
+      dispatch(changeRetentionInvoiceAction())
+    }
   }
 };
 
@@ -149,7 +162,7 @@ const mapStateToProps = (state) => {
   return {
     clients: getAllClients(state),
     clientSelected: getSelectedClient(state),
-    invoice: getNewInvoice(state)
+    invoice: getSelected(state)
   }
 };
 

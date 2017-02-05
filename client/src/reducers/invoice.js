@@ -3,14 +3,25 @@ import * as actionType from '../actions/types'
 
 const invoiceReducer = (state = {
   list: [],
-  selected: {},
-  newInvoice: {date: null, items: [], total: 0, subTotal: 0, iva: 0, name: "", number: "", retention: false}
+  selected: {date: null, items: [], total: 0, subTotal: 0, iva: 0, name: "", number: "", retention: true},
+  filter: ""
 }, action) => {
   switch (action.type) {
+    case actionType.FILTER_INVOICES:
+      return {
+        ...state,
+        filter: action.payload
+      };
     case actionType.FETCH_INVOICES_SUCCESS:
       return {
         ...state,
         list: action.payload
+      };
+    case actionType.FETCH_INVOICE_SUCCESS:
+      console.log(action.payload);
+      return {
+        ...state,
+        selected: action.payload
       };
     case actionType.SELECT_INVOICE:
       return {
@@ -20,52 +31,60 @@ const invoiceReducer = (state = {
         })[0]
       };
     case actionType.ADD_ITEM_TO_INVOICE:
-      var newItems = [...state.newInvoice.items, action.payload];
+      var newItems = [...state.selected.items, action.payload];
       return {
         ...state,
-        newInvoice: {
-          ...state.newInvoice,
+        selected: {
+          ...state.selected,
           items: newItems
         }
       };
     case actionType.CHANGE_ITEM_AMOUNT:
       var index = action.payload.index;
-      var item = state.newInvoice.items[index];
+      var item = state.selected.items[index];
       item.amount = action.payload.val;
 
-      var newItems = [...state.newInvoice.items.slice(0, index),
+      var newItems = [...state.selected.items.slice(0, index),
                       item,
-                      ...state.newInvoice.items.slice(index+1)];
+                      ...state.selected.items.slice(index+1)];
       return {
         ...state,
-        newInvoice: {
-          ...state.newInvoice,
+        selected: {
+          ...state.selected,
           items: newItems,
           ...sumInvoiceItems(newItems)
         }
       };
-    case actionType.CHANGE_ITEM_DETAIL:
-      var index = action.payload.index;
-      var item = state.newInvoice.items[index];
-      item.detail = action.payload.val;
-
-      var newItems = [...state.newInvoice.items.slice(0, index),
-        item,
-        ...state.newInvoice.items.slice(index+1)];
+    case actionType.CHANGE_INVOICE_RETENTION:
       return {
         ...state,
-        newInvoice: {
-          ...state.newInvoice,
+        selected: {
+          ...state.selected,
+          retention: !state.selected.retention
+        }
+      };
+    case actionType.CHANGE_ITEM_DETAIL:
+      var index = action.payload.index;
+      var item = state.selected.items[index];
+      item.detail = action.payload.val;
+
+      var newItems = [...state.selected.items.slice(0, index),
+        item,
+        ...state.selected.items.slice(index+1)];
+      return {
+        ...state,
+        selected: {
+          ...state.selected,
           items: newItems
         }
       };
     case actionType.DELETE_ITEM:
       var index = action.payload.index;
-      var newItems = [...state.newInvoice.items.slice(0, index), ...state.newInvoice.items.slice(index+1)];
+      var newItems = [...state.selected.items.slice(0, index), ...state.selected.items.slice(index+1)];
       return {
         ...state,
-        newInvoice: {
-          ...state.newInvoice,
+        selected: {
+          ...state.selected,
           items: newItems,
           ...sumInvoiceItems(newItems)
         }
@@ -73,32 +92,32 @@ const invoiceReducer = (state = {
     case actionType.CHANGE_INVOICE_NAME:
       return {
         ...state,
-        newInvoice: {
-          ...state.newInvoice,
+        selected: {
+          ...state.selected,
           name: action.payload.val
         }
       };
     case actionType.CHANGE_INVOICE_NUMBER:
       return {
         ...state,
-        newInvoice: {
-          ...state.newInvoice,
+        selected: {
+          ...state.selected,
           number: action.payload.val
         }
       };
     case actionType.CHANGE_INVOICE_DATE:
       return {
         ...state,
-        newInvoice: {
-          ...state.newInvoice,
+        selected: {
+          ...state.selected,
           date: action.payload.val
         }
       };
     case actionType.SAVE_INVOICE:
       return {
         ...state,
-        newInvoice: {
-          ...state.newInvoice,
+        selected: {
+          ...state.selected,
           number: action.payload.val
         }
       };

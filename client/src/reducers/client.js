@@ -11,8 +11,14 @@ const clientReducer = (state = {
         ...state,
         list: action.payload
       };
+    case actionType.FETCH_INVOICE_SUCCESS:
+      return {
+        ...state,
+        selected: state.list.filter(c => {
+          return c._id === action.payload.client
+        })[0]
+      };
     case actionType.SELECT_CLIENT:
-      console.log(action);
       return {
         ...state,
         selected: state.list.filter(c => {

@@ -5,7 +5,7 @@ import {TextField, FlatButton} from 'material-ui';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
 
-import {getNewInvoice} from '../../selectors/invoice'
+import {getSelected} from '../../selectors/invoice'
 import {changeAmountItemInvoiceAction, changeDetailItemInvoiceAction, deleteItemInvoiceAction} from '../../actions/invoice'
 
 class InvoiceItemTable extends React.Component {
@@ -64,7 +64,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
   return {
-    invoice: getNewInvoice(state)
+    invoice: getSelected(state)
   }
 };
 

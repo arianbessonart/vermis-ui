@@ -108,3 +108,34 @@ export function chargeInvoiceAction(invoiceId, date) {
     });
   }
 }
+
+export function updateInvoiceAction(invoice) {
+  return function (dispatch) {
+    axios({
+      method: "put",
+      url: "http://localhost:8081/api/invoices/"+invoice._id,
+      data: invoice
+    }).then((response) => {
+      browserHistory.push('/invoices');
+      dispatch({
+        type: actionType.CREATE_INVOICE_SUCCESS,
+        payload: response.data
+      });
+    });
+  }
+}
+
+export function changeRetentionInvoiceAction() {
+  return {
+    type: actionType.CHANGE_INVOICE_RETENTION,
+    payload: null
+  }
+}
+
+export function filterInvoicesAction(val) {
+  return {
+    type: actionType.FILTER_INVOICES,
+    payload: val
+  }
+}
+
