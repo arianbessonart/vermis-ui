@@ -32,7 +32,7 @@ class InvoiceItemTable extends React.Component {
     return (
       <div>
         <Table selectable={false}>
-          <TableHeader>
+          <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
               <TableHeaderColumn style={{width: "70%"}}>Detail</TableHeaderColumn>
               <TableHeaderColumn style={{width: "20%"}}>Amount</TableHeaderColumn>

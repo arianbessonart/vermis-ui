@@ -96,3 +96,15 @@ export function createInvoiceAction(invoice, client) {
     });
   }
 }
+
+export function chargeInvoiceAction(invoiceId, date) {
+  return function (dispatch) {
+    axios({
+      method: "put",
+      url: "http://localhost:8081/api/invoices/"+invoiceId+"/status/charged",
+      data: {date}
+    }).then((response) => {
+      dispatch(fetchInvoicesAction());
+    });
+  }
+}

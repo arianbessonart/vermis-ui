@@ -8,7 +8,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import { Link } from 'react-router'
 
 import {getAll} from '../selectors/invoice';
-import {fetchInvoicesAction} from '../actions/invoice';
+import {fetchInvoicesAction, chargeInvoiceAction} from '../actions/invoice';
 
 import InvoiceList from './components/invoiceList'
 
@@ -19,6 +19,16 @@ class InvoiceHome extends React.Component {
   }
 
   render() {
+    let invoiceIdSelected = null;
+
+    const handleOnCharge = (invoiceId) => {
+      invoiceIdSelected = invoiceId;
+      this.refs.dp.openDialog();
+    };
+
+    const handleChargeDate = (e, date) => {
+      this.props.chargeInvoice(invoiceIdSelected, date);
+    };
 
     const style = {
       marginRight: 20,
@@ -32,12 +42,13 @@ class InvoiceHome extends React.Component {
     let {invoices} = this.props;
     return (
       <div>
-        <InvoiceList invoices={invoices} />
+        <InvoiceList invoices={invoices} onCharge={handleOnCharge} />
         <Link to={`/invoices/new`}>
           <FloatingActionButton style={style}>
             <ContentAdd />
           </FloatingActionButton>
         </Link>
+        <DatePicker ref='dp' style={{display: "None"}} name="chargeDp" onChange={handleChargeDate} />
       </div>
     );
   }
@@ -47,6 +58,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchInvoices: () => {
       dispatch(fetchInvoicesAction())
+    },
+    chargeInvoice: (id, date) => {
+      dispatch(chargeInvoiceAction(id, date))
     }
   }
 };

@@ -3,7 +3,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link} from 'react-router'
 
-let InvoiceList = ({invoices}) => {
+let InvoiceList = ({invoices, onCharge}) => {
 
   let invoiceList = invoices.map((val, index) => {
 
@@ -15,7 +15,7 @@ let InvoiceList = ({invoices}) => {
     } else {
       statusIcon = <i className="material-icons">cancel</i>
     }
-    let chargeInvoice = val.status === "pending" ? <RaisedButton label="Charge" primary={true}/> : <RaisedButton label={val.status} disabled={true} primary={true}/>
+    let chargeInvoice = val.status === "pending" ? <RaisedButton label="Charge" primary={true} onClick={ () => onCharge(val._id)}></RaisedButton>: <RaisedButton label={val.status} disabled={true} primary={true}/>
     return (<TableRow key={index} id={val._id}>
         <TableRowColumn>{val.client.name}</TableRowColumn>
         <TableRowColumn><Link to={"/invoices/"+ val._id}>{val.name}</Link></TableRowColumn>
@@ -29,8 +29,8 @@ let InvoiceList = ({invoices}) => {
   });
   return (
     <div>
-      <Table>
-        <TableHeader displaySelectAll={false}>
+      <Table selectable={false}>
+        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>Client</TableHeaderColumn>
             <TableHeaderColumn>Name</TableHeaderColumn>

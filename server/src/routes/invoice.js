@@ -28,7 +28,6 @@ function create(req, res, next) {
   }
   var invoice = new Invoice(req.body);
   invoice.save(function (err, saved) {
-    console.log(err);
     if (!err) {
       res.status(200).send({invoice: saved});
     } else {
@@ -37,7 +36,24 @@ function create(req, res, next) {
   });
 }
 
-
+function changeStatus(req, res, next) {
+  if (req.params.status === "charged" && !req.body.date) {
+    res.status(403).end();
+  }
+  Invoice.findById(req.params.id, function (err, invoice) {
+    if (!err) {
+      invoice.status = req.params.status;
+      invoice.dateBilled = req.body.date;
+      invoice.save(function (err, saved) {
+        if (!err) {
+          res.status(200).send({invoice: saved});
+        }
+      });
+    } else {
+      res.status(500).send(err);
+    }
+  });
+}
 
 function printPdf(req, res, next) {
   if (!req.params.id) {
@@ -63,5 +79,6 @@ router.get('/', find);
 router.get('/:id/print', printPdf);
 router.get('/:id', findById);
 router.post('/', create);
+router.put('/:id/status/:status', changeStatus);
 
 module.exports = router;
