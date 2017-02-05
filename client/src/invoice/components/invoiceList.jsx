@@ -1,8 +1,9 @@
 import React from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
+import {Link} from 'react-router'
 
-let InvoiceList = ({invoices, onSelected}) => {
+let InvoiceList = ({invoices}) => {
 
   let invoiceList = invoices.map((val, index) => {
 
@@ -17,7 +18,7 @@ let InvoiceList = ({invoices, onSelected}) => {
     let chargeInvoice = val.status === "pending" ? <RaisedButton label="Charge" primary={true}/> : <RaisedButton label={val.status} disabled={true} primary={true}/>
     return (<TableRow key={index} id={val._id}>
         <TableRowColumn>{val.client.name}</TableRowColumn>
-        <TableRowColumn>{val.name}</TableRowColumn>
+        <TableRowColumn><Link to={"/invoices/"+ val._id}>{val.name}</Link></TableRowColumn>
         <TableRowColumn>{val.number}</TableRowColumn>
         <TableRowColumn>${val.total}</TableRowColumn>
         <TableRowColumn>{val.date}</TableRowColumn>
@@ -28,10 +29,7 @@ let InvoiceList = ({invoices, onSelected}) => {
   });
   return (
     <div>
-      <Table onRowSelection={(index) => {
-        var invoice = invoices[index[0]];
-        onSelected(invoice._id);
-      }}>
+      <Table>
         <TableHeader displaySelectAll={false}>
           <TableRow>
             <TableHeaderColumn>Client</TableHeaderColumn>

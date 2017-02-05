@@ -32,9 +32,7 @@ class InvoiceHome extends React.Component {
     let {invoices} = this.props;
     return (
       <div>
-        <InvoiceList invoices={invoices} onSelected={(invoiceId) => {
-          browserHistory.push('/invoices/'+invoiceId)
-        }} />
+        <InvoiceList invoices={invoices} />
         <Link to={`/invoices/new`}>
           <FloatingActionButton style={style}>
             <ContentAdd />
